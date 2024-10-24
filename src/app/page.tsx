@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useTracks } from "./hooks/useTracks"
 
-const ItunesLibraryViewer = () => {
+export default function Page() {
   const { tracks, setTracks, error } = useTracks([])
 
   const {
@@ -45,13 +45,13 @@ const ItunesLibraryViewer = () => {
           <h1 className="mb-4 flex items-center justify-between gap-2 text-2xl font-bold">
             <div className="flex flex-row items-center gap-4">
               <Music className="h-6 w-6" />
-              iTunes Library Viewer
+              Apple Music Viewer
             </div>
             <ThemeToggle />
           </h1>
 
           <div className="flex w-full items-center justify-center">
-            <Label className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-secondary">
+            <Label className="bg-secondary flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed">
               <div className="flex flex-col items-center justify-center pb-6 pt-5">
                 <Upload className="mb-3 h-8 w-8 text-gray-400 dark:text-white" />
                 <p className="mb-2 text-sm">
@@ -59,7 +59,7 @@ const ItunesLibraryViewer = () => {
                   and drop
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  iTunes Library XML file
+                  Apple Music XML file
                 </p>
               </div>
               <Input
@@ -109,7 +109,7 @@ const ItunesLibraryViewer = () => {
                   {displayTracks.map((track, index) => (
                     <tr
                       key={track["Track ID"] || index}
-                      className="border-b hover:bg-secondary"
+                      className="hover:bg-secondary border-b"
                     >
                       <td className="px-4 py-3 font-medium">{track.Name}</td>
                       <td className="px-4 py-3">{track.Artist}</td>
@@ -137,5 +137,3 @@ const ItunesLibraryViewer = () => {
     </div>
   )
 }
-
-export default ItunesLibraryViewer
