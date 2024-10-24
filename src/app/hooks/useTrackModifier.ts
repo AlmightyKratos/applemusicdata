@@ -53,5 +53,5 @@ export const useTrackModifier = (
   const [modifier, setModifier] = useState<DisplayMode>(modifierArg)
   const operation = displayFunc(modifier)
   const displayTracks = operation(tracks)
-  return { displayTracks, setModifier }
+  return { displayTracks, setModifier, modifier }
 }

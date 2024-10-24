@@ -51,7 +51,7 @@ const parseTracksXml = (xmlString: string): ParsedTracks => {
       const keys = Array.from(trackDict.getElementsByTagName("key"))
 
       for (const key of keys) {
-        let value = key.nextElementSibling
+        const value = key.nextElementSibling
         if (!value || !key.textContent) continue
 
         const keyName = key.textContent

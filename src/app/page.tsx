@@ -1,13 +1,20 @@
 "use client"
-import { useTrackModifier } from "./hooks/useTrackModifier"
+import { DisplayMode, useTrackModifier } from "./hooks/useTrackModifier"
+import { ThemeToggle } from "@/components/ui/ThemeToggle"
 import { Music, Upload, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
 import { useTracks } from "./hooks/useTracks"
 
 const ItunesLibraryViewer = () => {
   const { tracks, setTracks, error } = useTracks([])
 
-  const { displayTracks, setModifier: setDisplayMode } =
-    useTrackModifier(tracks)
+  const {
+    displayTracks,
+    setModifier: setDisplayMode,
+    modifier,
+  } = useTrackModifier(tracks)
 
   const formatDuration = (ms?: number): string => {
     if (!ms) return "--:--"
@@ -24,56 +31,67 @@ const ItunesLibraryViewer = () => {
     setTracks(file)
   }
 
+  const modifierButtons: { name: string; displayMode: DisplayMode }[] = [
+    { name: "Show All", displayMode: "all" },
+    { name: "Show Duplicates", displayMode: "duplicates" },
+    { name: "Show 69 Plays", displayMode: "69 plays" },
+    { name: "Show Kanye", displayMode: "kanye" },
+  ]
+
   return (
     <div className="container mx-auto max-w-6xl p-4">
       <div className="p-6">
         <div className="mb-8">
-          <h1 className="mb-4 flex items-center gap-2 text-2xl font-bold">
-            <Music className="h-6 w-6" />
-            iTunes Library Viewer
+          <h1 className="mb-4 flex items-center justify-between gap-2 text-2xl font-bold">
+            <div className="flex flex-row items-center gap-4">
+              <Music className="h-6 w-6" />
+              iTunes Library Viewer
+            </div>
+            <ThemeToggle />
           </h1>
 
           <div className="flex w-full items-center justify-center">
-            <label className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-gray-50 hover:bg-gray-100">
+            <Label className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-secondary">
               <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                <Upload className="mb-3 h-8 w-8 text-gray-400" />
-                <p className="mb-2 text-sm text-gray-500">
+                <Upload className="mb-3 h-8 w-8 text-gray-400 dark:text-white" />
+                <p className="mb-2 text-sm">
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-gray-500">iTunes Library XML file</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  iTunes Library XML file
+                </p>
               </div>
-              <input
+              <Input
                 type="file"
                 className="hidden"
                 accept=".xml"
                 onChange={handleFileUpload}
-                // disabled={isLoading}
               />
-            </label>
+            </Label>
           </div>
         </div>
 
-        {error && <div>Alert</div>}
+        {error && <div>Unfortunately there has been an error: {error}</div>}
 
         {displayTracks.length > 0 && (
-          <>
-            <div className="flex flex-row gap-8">
-              <button onClick={() => setDisplayMode("all")}>Show All</button>
-              <button onClick={() => setDisplayMode("duplicates")}>
-                Show Duplicates
-              </button>
-              <button onClick={() => setDisplayMode("69 plays")}>
-                Show 69 plays
-              </button>
-              <button onClick={() => setDisplayMode("kanye")}>
-                Show Kanye
-              </button>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-row gap-4">
+              {modifierButtons.map((button) => (
+                <Button
+                  key={button.name}
+                  variant="outline"
+                  onClick={() => setDisplayMode(button.displayMode)}
+                  disabled={modifier === button.displayMode}
+                >
+                  {button.name}
+                </Button>
+              ))}
             </div>
 
             <div className="overflow-x-auto rounded-md">
               <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50 text-xs uppercase text-black">
+                <thead className="bg-secondary text-xs uppercase">
                   <tr>
                     <th className="px-4 py-3">Name</th>
                     <th className="px-4 py-3">Artist</th>
@@ -83,7 +101,7 @@ const ItunesLibraryViewer = () => {
                       <Clock className="inline h-4 w-4" />
                     </th>
                     <th className="px-4 py-3">Year</th>
-                    <th className="px-4 py-3">Quality</th>
+                    {/* <th className="px-4 py-3">Quality</th> */}
                     <th className="px-4 py-3 text-center">Plays</th>
                   </tr>
                 </thead>
@@ -91,7 +109,7 @@ const ItunesLibraryViewer = () => {
                   {displayTracks.map((track, index) => (
                     <tr
                       key={track["Track ID"] || index}
-                      className="border-b hover:bg-gray-50"
+                      className="border-b hover:bg-secondary"
                     >
                       <td className="px-4 py-3 font-medium">{track.Name}</td>
                       <td className="px-4 py-3">{track.Artist}</td>
@@ -101,10 +119,10 @@ const ItunesLibraryViewer = () => {
                         {formatDuration(track["Total Time"])}
                       </td>
                       <td className="px-4 py-3">{track.Year}</td>
-                      <td className="px-4 py-3">
+                      {/* <td className="px-4 py-3">
                         {track["Bit Rate"]}kbps /{" "}
                         {(track["Sample Rate"] || 0) / 1000}kHz
-                      </td>
+                      </td> */}
                       <td className="px-4 py-3 text-center">
                         {track["Play Count"]}
                       </td>
@@ -113,7 +131,7 @@ const ItunesLibraryViewer = () => {
                 </tbody>
               </table>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
