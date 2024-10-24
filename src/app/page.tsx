@@ -34,10 +34,12 @@ const WhereIsLibrary = () => {
             <img
               src="/exportLibraryDark.png"
               className="hidden p-8 dark:block"
+              alt="Export library xml file from Apple Music"
             ></img>
             <img
               src="/exportLibraryLight.png"
               className="block p-8 dark:hidden"
+              alt="Export library xml file from Apple Music"
             ></img>
             <figcaption className="text-sm">
               Open image in new tab for fullscreen image
