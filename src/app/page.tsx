@@ -6,9 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useTracks } from "./hooks/useTracks"
+import { toast } from "sonner"
 
 export default function Page() {
   const { tracks, setTracks, error } = useTracks([])
+
+  if (error) {
+    toast(error)
+  }
 
   const {
     displayTracks,
@@ -43,7 +48,7 @@ export default function Page() {
       <div className="p-6">
         <div className="mb-8">
           <h1 className="mb-4 flex items-center justify-between gap-2 text-2xl font-bold">
-            <div className="flex flex-row items-center gap-4">
+            <div className="flex flex-row items-center gap-4 tracking-tight">
               <Music className="h-6 w-6" />
               Apple Music Viewer
             </div>
@@ -53,13 +58,10 @@ export default function Page() {
           <div className="flex w-full items-center justify-center">
             <Label className="bg-secondary flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed">
               <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                <Upload className="mb-3 h-8 w-8 text-gray-400 dark:text-white" />
+                <Upload className="mb-3 h-8 w-8 text-gray-400" />
                 <p className="mb-2 text-sm">
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Apple Music XML file
                 </p>
               </div>
               <Input
@@ -71,8 +73,6 @@ export default function Page() {
             </Label>
           </div>
         </div>
-
-        {error && <div>Unfortunately there has been an error: {error}</div>}
 
         {displayTracks.length > 0 && (
           <div className="flex flex-col gap-4">

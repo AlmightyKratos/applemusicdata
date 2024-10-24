@@ -97,6 +97,7 @@ export const useTracks = (tracksArg: Track[]) => {
       setError(transformedData.error)
     } else {
       setTracks1(transformedData.tracks)
+      setError(null)
     }
   }
 
